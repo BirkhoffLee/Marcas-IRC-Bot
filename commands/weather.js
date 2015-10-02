@@ -71,10 +71,10 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
 
         var weather = json.weather[0];
 
-        var cityName        = weather.city_name;
-        var lastUpdate      = weather.last_update;
-        var nowText         = weather.now.text;
-        var nowTemperature  = weather.now.temperature;
+        var cityName        = (weather.city_name)       ? weather.city_name   : "N/A" ;
+        var lastUpdate      = (weather.last_update)     ? weather.last_update : "N/A" ;
+        var nowText         = (weather.now.text)        ? weather.now.text    : "N/A" ;
+        var nowTemperature  = (weather.now.temperature) ? weather.now.temperature : "N/A" ;
 
         var weatherText     = "－目前\x02" + cityName + "\x02的天氣：";
             weatherText    += nowText;
@@ -89,9 +89,9 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
             }
             futWeathers++;
 
-            var date = dayWeather.date;
-            var day  = dayWeather.day;
-            var cop  = dayWeather.cop;
+            var date = (dayWeather.date) ? dayWeather.date : "N/A" ;
+            var day  = (dayWeather.day) ? dayWeather.day : "N/A" ;
+            var cop  = (dayWeather.cop) ? dayWeather.cop : "N/A" ;
             var text = (dayWeather.text.isContain("/")) ? dayWeather.text.split("/") : dayWeather.text;
             var high = (dayWeather.high == "-") ? "N/A" : dayWeather.high;
             var low  = (dayWeather.low == "-") ? "N/A" : dayWeather.high;
@@ -105,7 +105,7 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
             futureText += "－" + date + " " + day + "：";
             futureText += text;
             futureText += "，" + "氣溫：\x02" + high + "°C\x02 / \x02" + low + "°C\x02";
-            futureText += "，" + "降雨概率：\x02" + cop.toString() + "\x02。\n";
+            futureText += "，" + "降雨概率：\x02" + cop.toString() + "\x02。";
         });
         weatherText += futureText;
         // weatherText += "最後更新 (ISO 8601)：" + lastUpdate.toString();

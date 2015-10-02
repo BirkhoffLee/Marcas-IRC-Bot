@@ -1,4 +1,5 @@
 config.js
 start.bat
+colors.bat
+colors.js
 botBanList.db
-botReplies.db

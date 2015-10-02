@@ -31,7 +31,7 @@ var config = {
 
     /* Other settings */
     others: {
-        version: "2.1.7",
+        version: "2.1.8",
         identify: "0000",
         admin: [
             "admin1",
@@ -59,7 +59,7 @@ var config = {
         },
         maxListeners: 0, // 0: unlimited
         channelOpAreAdmin: true,
-        trimMessage: false
+        trimMessage: true
     }
 };
 

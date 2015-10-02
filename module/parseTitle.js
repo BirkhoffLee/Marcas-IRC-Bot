@@ -3,6 +3,7 @@ hook.on('initalize/prepare', function () {
     configArr.necessaryModule.push("cheerio");
     configArr.necessaryModule.push("html-entities");
     configArr.necessaryModule.push("url");
+    configArr.necessaryModule.push("iconv-lite");
     config.setConfig(configArr);
 });
 
@@ -11,6 +12,7 @@ hook.on('common/parseChat', function (from, to, message) {
     var htmlEntities = _html_entities.XmlEntities;
     var entities = new htmlEntities();
 
+    message = message.trim();
     var url = message.match(/https?:\/\/\S*/ig);
     if (url == null) {
         return;
@@ -24,16 +26,27 @@ hook.on('common/parseChat', function (from, to, message) {
                 'Cookie': 'over18=1',
                 'Accept-Language': 'zh-TW,zh;q=0.8,en-US;q=0.5,en;q=0.3'
             },
-            timeout: 1500,
-            gzip: true
+            timeout: 2000,
+            gzip: true,
+            encoding: null
         };
 
         _request (options, function(error, response, body) {
             if (!error && response.statusCode == 200) {
+                try {
+                    var encode = response.headers['content-type'].match(/charset=\S+/i).toString().replace('charset=', '');
+                } catch (e) {
+                    // ignore
+                }
+
+                if (typeof encode != "undefined" && !encode.match('utf-8')) {
+                    body = _iconv_lite.decode(body, encode);
+                }
+
                 $ = _cheerio.load(body);
-                var title = entities.decode($('title').text().trim());
+                var title = $('title').text().trim().replace(/\s/g, ' ');console.log();
                 if (title != '') {
-                    common.botSay(target, "［ \x02" + title.replace(/\n/g, " ") + "\x02 ］－  \x02" + _url.parse(options.url).host + "\x02");
+                    common.botSay(target, "［ \x02" + title.replace(/\n/g, " ") + "\x02 ］－  \x02" + response.request.host.trim() + "\x02");
                 }
             }
         });

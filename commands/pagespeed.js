@@ -22,15 +22,13 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     }
 
     _request(apiURL + args[1], function(err, response, body) {
-        if (!err && response.statusCode == 200) {
-            if (typeof JSON.parse(body).ruleGroups.SPEED.score == "undefined") {
-                common.botSay(target, common.mention(from) + "Something went wrong, try again later :(", "red");
-                return;
-            }
+        if (err || response.statusCode != 200 || typeof JSON.parse(body).ruleGroups.SPEED.score == "undefined") {
+            common.botSay(target, common.mention(from) + "Something went wrong, try again later :(", "red");
+            return;
+        }
 
-            var score = JSON.parse(body).ruleGroups.SPEED.score;
-            common.botSay(target, common.mention(from) + "The PageSpeed score of \"" + args[1] + "\" is: " + score + '/100');
-         }
+        var score = JSON.parse(body).ruleGroups.SPEED.score;
+        common.botSay(target, common.mention(from) + "The PageSpeed score of \"" + args[1] + "\" is: " + score + '/100');
     });
 });
 

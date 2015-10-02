@@ -1,0 +1,16 @@
+{"created":1443273575122,"content":"$BOTNAME$:$SP$(.*?)活的夠久(.*?)","reply":"不，我不想死！","by":"Birkhoff_","_id":"5r5ssL1D2wcZymJ1"}
+{"created":1443441146419,"content":"^$BOTNAME$:$SP$trans(.*?)$SP$code(.*?)","reply":"http://developer.baidu.com/wiki/index.php?title=%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3%E9%A6%96%E9%A1%B5/%E7%99%BE%E5%BA%A6%E7%BF%BB%E8%AF%91/%E7%BF%BB%E8%AF%91API#.E8.AF.AD.E7.A7.8D.E7.BC.96.E7.A0.81","by":"Birkhoff_","_id":"6ElNkSXnRPjakk8O"}
+{"created":1443271035366,"content":"^ping$","reply":"pong","by":"Birkhoff_","_id":"6U4t83tpQi8mgmGr"}
+{"created":1443440918484,"content":"^$BOTNAME$:$SP$(good|nice|great|awesome)","reply":"My dad taught me good :)","by":"Birkhoff__","_id":"6sQ6wv8uyMNZeBiR"}
+{"created":1443194584650,"content":"^Hello$SP$World","reply":"Hello World","by":"Birkhoff_","_id":"CEVv2zvu4HtxSWYR"}
+{"created":1443440949734,"content":"^$BOTNAME$:$SP$github","reply":"https://github.com/BirkhoffLee/Marcas-IRC-Bot/","by":"Birkhoff__","_id":"Es6sarccrHiOLimt"}
+{"created":1443763190171,"content":"$BOTNAME$:(.*?)乖(.*?)","reply":"謝謝誇獎 OwO","by":"BirkhoffLee","_id":"HHJC9EgZ9hspgFPi"}
+{"created":1443448918941,"content":"$BOTNAME$:$SP$乖","reply":"OwO","by":"Birkhoff_","_id":"Q57rEKhRw7dIxsV5"}
+{"created":1443613522544,"content":"$黑黑","reply":"好黑 我看不到路惹！","by":"Birkhoff_","_id":"RFNB9HIgnGw5qxVy"}
+{"created":1443440671555,"content":"^(hey|hello|hi)$SP$$BOTNAME$","reply":"Hello!","by":"Birkhoff_","_id":"RnPAjMglgCgkXMgJ"}
+{"created":1443242196617,"content":"^nodejs","reply":"nodejs大好","by":"Birkhoff_","_id":"SYZ8iaTcdH7zOeF3"}
+{"created":1443242199889,"content":"^node.js","reply":"node.js大好","by":"Birkhoff_","_id":"ZfpaSYfL6SEthSW2"}
+{"created":1443440880128,"content":"^(good|nice|great|awesome)$SP$$BOTNAME$","reply":"My Dad taught me good :)","by":"Birkhoff__","_id":"eLlXgxcdoGitjUFP"}
+{"created":1443449904613,"content":"gandi","reply":"no bullshit","by":"Birkhoff_","_id":"irWk2dQQiQObCc9O"}
+{"created":1443613090084,"content":"$BOTNAME$:$SP$跟黑黑問好","reply":"黑黑好","by":"Birkhoff_","_id":"t8gLtkMeUHaPnyvo"}
+{"created":1443441958228,"content":"$BOTNAME$:$SP$(.*?)irc(.*?)log(.*?)","reply":"http://irclog.pcchou.me/ysitd","by":"Birkhoff_","_id":"tiP1HtfDl7uay26q"}
