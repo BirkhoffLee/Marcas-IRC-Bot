@@ -46,7 +46,7 @@ hook.on('common/parseChat', function (from, to, message) {
                 $ = _cheerio.load(body);
                 var title = $('title').text().trim().replace(/\s/g, ' ');console.log();
                 if (title != '') {
-                    common.botSay(target, "［ \x02" + title.replace(/\n/g, " ") + "\x02 ］－  \x02" + response.request.host.trim() + "\x02");
+                    common.botSay(target, "［ \x02" + entities.decode(title.replace(/\n/g, " ")) + "\x02 ］－  \x02" + response.request.host.trim() + "\x02");
                 }
             }
         });
