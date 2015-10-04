@@ -7,6 +7,7 @@ var config = {
         channels: [
             "#ysitd",
             "#sinta",
+            "#oktw",
             "#birkhoff",
             "#birkhofftest",
             "#ysttd"
@@ -31,7 +32,7 @@ var config = {
 
     /* Other settings */
     others: {
-        version: "2.1.8",
+        version: "2.1.9",
         identify: "0000",
         admin: [
             "admin1",
@@ -59,7 +60,7 @@ var config = {
         },
         maxListeners: 0, // 0: unlimited
         channelOpAreAdmin: true,
-        trimMessage: true
+        trimMessage: false
     }
 };
 
