@@ -24,5 +24,5 @@ Just take a look of other commands and modules. You will find it easy to add a c
 
 # Contact & Join development  
 Author: Birkhoff Lee, the Chief Software Engineer @ Sinta Design  
-Contact: Send a email to b@irkhoff.com.  
+Contact: Send a email to admin@birkhoff.me.  
 If you wanna join the development, just give me a pull request with new feature or bug fixing...ANYTHING! And you're in.  
