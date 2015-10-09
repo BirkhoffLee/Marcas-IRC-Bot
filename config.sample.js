@@ -32,7 +32,7 @@ var config = {
 
     /* Other settings */
     others: {
-        version: "2.1.9",
+        version: "2.2.5",
         identify: "0000",
         admin: [
             "admin1",

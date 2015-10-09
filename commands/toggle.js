@@ -1,11 +1,12 @@
-var commandName      = "pagespeed";
-var commandSudo      = false;
-var commandHelp      = "Get the PageSpeed score of the website by Google.";
-var commandUsage     = "[url]";
+var commandName      = "toggle";
+var commandSudo      = true;
+var commandHelp      = "Toggle features.";
+var commandUsage     = "[toggleName]";
 var commandDisabled  = false;
 
-var apiKey           = "";
-var apiURL           = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed?&locale=zh_TW&screenshot=false&fields=ruleGroups&key=' + apiKey + '&url=';
+hook.on('initalize/initalize', function () {
+    toggleList = config.getConfig().others.toggleList;
+});
 
 hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     var target = common.defaultTarget(from, to);
@@ -23,21 +24,18 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         return false;
     }
 
-    _request(apiURL + args[1], function(err, response, body) {
-        if (err || response.statusCode != 200 || typeof JSON.parse(body).ruleGroups.SPEED.score == "undefined") {
-            common.botSay(target, common.mention(from) + "Something went wrong, try again later :(", "red");
-            return;
-        }
+    var name = args[1];
+    if (typeof toggleList[name] == "undefined") {
+        common.botSay(target, common.mention(from) + "Feature not found.", "red");
+        return;
+    }
 
-        var score = JSON.parse(body).ruleGroups.SPEED.score;
-        common.botSay(target, common.mention(from) + "The PageSpeed score of \"" + args[1] + "\" is: " + score + '/100');
-    });
-});
-
-hook.on('initalize/prepare', function () {
-    var configArr = config.getConfig();
-    configArr.necessaryModule.push("request");
-    config.setConfig(configArr);
+    if (toggleList[name] == true) {
+        toggleList[name] = false;
+    } else {
+        toggleList[name] = true;
+    }
+    common.botSay(target, common.mention(from) + "The value of '" + name + "' changed to " + toggleList[name].toString() + ".", "blue");
 });
 
 hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {
@@ -67,4 +65,3 @@ hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {
         common.botSay(target, helpString);
     }
 });
-

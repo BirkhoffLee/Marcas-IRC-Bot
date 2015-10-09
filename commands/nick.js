@@ -1,11 +1,8 @@
-var commandName      = "pagespeed";
-var commandSudo      = false;
-var commandHelp      = "Get the PageSpeed score of the website by Google.";
-var commandUsage     = "[url]";
+var commandName      = "nick";
+var commandSudo      = true;
+var commandHelp      = "Change my nickname.";
+var commandUsage     = "[newNickName]";
 var commandDisabled  = false;
-
-var apiKey           = "";
-var apiURL           = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed?&locale=zh_TW&screenshot=false&fields=ruleGroups&key=' + apiKey + '&url=';
 
 hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     var target = common.defaultTarget(from, to);
@@ -23,21 +20,14 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         return false;
     }
 
-    _request(apiURL + args[1], function(err, response, body) {
-        if (err || response.statusCode != 200 || typeof JSON.parse(body).ruleGroups.SPEED.score == "undefined") {
-            common.botSay(target, common.mention(from) + "Something went wrong, try again later :(", "red");
-            return;
-        }
-
-        var score = JSON.parse(body).ruleGroups.SPEED.score;
-        common.botSay(target, common.mention(from) + "The PageSpeed score of \"" + args[1] + "\" is: " + score + '/100');
-    });
-});
-
-hook.on('initalize/prepare', function () {
-    var configArr = config.getConfig();
-    configArr.necessaryModule.push("request");
-    config.setConfig(configArr);
+    if (args[1] != Client.nick) {
+        Client.send("nick", args[1]);
+        // common.botSay(target, common.mention(from) + "My nickname is changed to " + args[1]);
+        console.log("* WARNING: Unauthorized sudo request from %s".red, from);
+    } else {
+        // common.botSay(target, common.mention(from) + "My nickname is already " + args[1]);
+        console.log("* WARNING: Nickname changed to %s by %s".red, args[1], from);
+    }
 });
 
 hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {
@@ -67,4 +57,3 @@ hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {
         common.botSay(target, helpString);
     }
 });
-

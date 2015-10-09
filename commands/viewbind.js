@@ -1,7 +1,7 @@
 var commandName      = "viewbind";
 var commandSudo      = false;
-var commandHelp      = "Look the settings of the bind.";
-var commandUsage     = "[reply]";
+var commandHelp      = "Gives the information of the binding.";
+var commandUsage     = "[pattern]";
 var commandDisabled  = false;
 
 hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
@@ -21,25 +21,22 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     }
 
     var cmdPre = config.getConfig().others.commandPrefix;
-    var reply = message.slice(cmdPre.length + commandName.length + 1);
+    var togglePattern = message.slice(cmdPre.length + commandName.length + 1);
 
     for (var pattern in botReplies) {
-        if (botReplies[pattern].reply == reply) {
+        if (pattern == togglePattern) {
             var creater = botReplies[pattern].by;
             var time = botReplies[pattern].created;
 
-            var result  = common.mention(from) + "The info of bind \"" + reply + "\":";
-                result += "\nCreater: \x02" + creater + "\x02";
-                result += "\nCreated at: \x02" + time + "\x02";
-                result += "\nPattern to toogle: \x02" + pattern + "\x02";
-                // result += "\n\x02ATTENTION: The timezone of the create time (unix timestamp) may not be the same as the timezone of your country's.\x02";
+            var result  = common.mention(from) + "The creater: \x02" + creater + "\x02";
+                result += ", created at: \x02" + time + "\x02";
 
             common.botSay(target, result, "red");
             return;
         }
     }
 
-    common.botSay(target, common.mention(from) + "The bind with reply \"" + reply + "\" doesn't exist.", "red");
+    common.botSay(target, common.mention(from) + "The binding doesn't exist.", "red");
 });
 
 hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {

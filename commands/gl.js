@@ -4,6 +4,9 @@ var commandHelp      = "Shorten a URL. (goo.gl)";
 var commandUsage     = "[url]";
 var commandDisabled  = false;
 
+var apiKey           = "AIzaSyAN9jpAbECwgAI4yy8lkFKUpEV6D6ajAXA"
+var apiURL           = 'https://www.googleapis.com/urlshortener/v1/url?key=' + apiKey;
+
 hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     var target = common.defaultTarget(from, to);
 
@@ -21,7 +24,7 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     }
 
     var data = {
-        uri: 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyDjYeBKwBrGq2I6FhxJj1il6R40buIKECo',
+        uri: apiURL,
         json: {
             "longUrl": args[1]
         }

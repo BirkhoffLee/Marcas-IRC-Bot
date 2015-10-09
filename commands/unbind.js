@@ -1,6 +1,6 @@
 var commandName      = "unbind";
 var commandSudo      = true;
-var commandHelp      = "Remove an auto reply. Use viewbind command to get TIMESTAMP.";
+var commandHelp      = "Remove a binding. Use viewbind command to get TIMESTAMP.";
 var commandUsage     = "[TIMESTAMP]";
 var commandDisabled  = false;
 

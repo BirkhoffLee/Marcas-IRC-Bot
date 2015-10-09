@@ -1,11 +1,23 @@
-var commandName      = "pagespeed";
+var commandName      = "explore";
 var commandSudo      = false;
-var commandHelp      = "Get the PageSpeed score of the website by Google.";
-var commandUsage     = "[url]";
+var commandHelp      = "Give you something you may have interest to.";
+var commandUsage     = "";
 var commandDisabled  = false;
 
-var apiKey           = "";
-var apiURL           = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed?&locale=zh_TW&screenshot=false&fields=ruleGroups&key=' + apiKey + '&url=';
+var feedList = [
+    "http://feeds.feedburner.com/freegroup/",
+    "http://feeds.feedburner.com/soft4funtw",
+    "http://chinese.engadget.com/rss.xml",
+    "http://www.ithome.com.tw/rss",
+    "http://pansci.tw/feed"
+    // "https://blog.birkhoff.me/rss/"
+];
+
+hook.on('initalize/prepare', function () {
+    var configArr = config.getConfig();
+    configArr.necessaryModule.push("feed-read");
+    config.setConfig(configArr);
+});
 
 hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     var target = common.defaultTarget(from, to);
@@ -18,26 +30,17 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         common.botSay(target, common.mention(from) + "Access Denied!", "red");
         return;
     }
-    if (typeof args[1] == "undefined") {
-        common.botSay(target, "Usage: " + commandUsage, "red");
-        return false;
-    }
 
-    _request(apiURL + args[1], function(err, response, body) {
-        if (err || response.statusCode != 200 || typeof JSON.parse(body).ruleGroups.SPEED.score == "undefined") {
-            common.botSay(target, common.mention(from) + "Something went wrong, try again later :(", "red");
-            return;
-        }
-
-        var score = JSON.parse(body).ruleGroups.SPEED.score;
-        common.botSay(target, common.mention(from) + "The PageSpeed score of \"" + args[1] + "\" is: " + score + '/100');
+    feedList.forEach(function (feedURL) {
+        _feed_read (feedURL, function(err, articles) {
+            if (err) {
+                console.log("* WARNING: Unable to get the feed info of %s. ".red, feedURL);
+                return;
+            }
+            var i = articles[Math.floor(Math.random() * articles.length)];
+            common.botSay(target, "［ \x02" + i.title + "\x02 ］－  \x02" + i.link + "\x02");
+        });
     });
-});
-
-hook.on('initalize/prepare', function () {
-    var configArr = config.getConfig();
-    configArr.necessaryModule.push("request");
-    config.setConfig(configArr);
 });
 
 hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {
@@ -67,4 +70,3 @@ hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {
         common.botSay(target, helpString);
     }
 });
-

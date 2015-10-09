@@ -34,6 +34,7 @@ hook.emit("initalize/prepare");
  * Require necessary node_modules.
  */
 var loadedModules = [];
+var neededModules = [];
 config.getConfig().necessaryModule.forEach(function (moduleName) {
     if (moduleName == 'require-directory') {
         return;
@@ -51,19 +52,17 @@ config.getConfig().necessaryModule.forEach(function (moduleName) {
         console.error("\nNode module " + moduleName + " isn't found.");
         console.error("You may solve this by \"npm install " + moduleName + "\".");
         console.error("");
-        console.error("The required node module of this bot are below:");
+        console.error("The required node modules of this bot are below:");
         config.getConfig().necessaryModule.forEach(function(moduleName) {
-            console.error("-" + moduleName);
+            if (!neededModules.inArray(moduleName)) {
+                neededModules.push(moduleName);
+            }
         });
+        console.log(neededModules.join(" "));
 
         process.exit(e.code);
     }
 });
-
-/**
- * Initalize
- */
-hook.emit("initalize/initalize");
 
 /**
  * Load database
@@ -72,6 +71,11 @@ database  = {
                 botReplies: new _nedb({ filename: 'botReplies.db', autoload: true }),
                 botBanList: new _nedb({ filename: 'botBanList.db', autoload: true })
             };
+
+/**
+ * Initalize
+ */
+hook.emit("initalize/initalize");
 
 /**
  * Load required vars

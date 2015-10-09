@@ -240,7 +240,7 @@ function botSay (target, content, color) {
         color = colors[color];
     }
 
-    var say = color + content.replaceAll("\n", "\n" + color,"case-insensitive");
+    var say = color + content.replaceAll("\n", "\n" + color, true);
     try {
         return Client.say(target, say);
     } catch(e) {

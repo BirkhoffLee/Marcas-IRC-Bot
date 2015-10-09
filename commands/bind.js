@@ -1,6 +1,6 @@
 var commandName      = "bind";
 var commandSudo      = true;
-var commandHelp      = "Define an auto reply.";
+var commandHelp      = "Add a binding.";
 var commandUsage     = "[key] [value]";
 var commandDisabled  = false;
 

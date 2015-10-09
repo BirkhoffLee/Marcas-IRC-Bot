@@ -1,11 +1,14 @@
-var commandName      = "pagespeed";
+var commandName      = "reversedns";
 var commandSudo      = false;
-var commandHelp      = "Get the PageSpeed score of the website by Google.";
-var commandUsage     = "[url]";
+var commandHelp      = "Get reverse (PTR) record from IPv4/IPv6 addresses.";
+var commandUsage     = "[A-IPv4-or-IPv6-address]";
 var commandDisabled  = false;
 
-var apiKey           = "";
-var apiURL           = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed?&locale=zh_TW&screenshot=false&fields=ruleGroups&key=' + apiKey + '&url=';
+var apiURL           = "http://api.statdns.com/x/{ip}";
+var header           = {
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36',
+                            'Accept-Language': 'zh-TW,zh;q=0.8,en-US;q=0.5,en;q=0.3'
+                       };
 
 hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     var target = common.defaultTarget(from, to);
@@ -23,14 +26,26 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         return false;
     }
 
-    _request(apiURL + args[1], function(err, response, body) {
-        if (err || response.statusCode != 200 || typeof JSON.parse(body).ruleGroups.SPEED.score == "undefined") {
+    _request({
+        url: apiURL.replaceAll("{ip}", args[1], true).trim(),
+        headers: header,
+        timeout: 6000,
+        gzip: true,
+        encoding: null
+    }, function(err, response, body) {
+        if (err) {
             common.botSay(target, common.mention(from) + "Something went wrong, try again later :(", "red");
             return;
         }
-
-        var score = JSON.parse(body).ruleGroups.SPEED.score;
-        common.botSay(target, common.mention(from) + "The PageSpeed score of \"" + args[1] + "\" is: " + score + '/100');
+        var result = JSON.parse(body.toString());
+        if (typeof result.message != "undefined") {
+            common.botSay(target, common.mention(from) + result.message + ".", "red");
+            return;
+        }
+        if (typeof result.answer != "undefined" && typeof result.answer[0] != "undefined" && typeof result.answer[0].rdata != "undefined") {
+            common.botSay(target, common.mention(from) + "The PTR record of \x02" + args[1] + "\x02 is \x02" + result.answer[0].rdata + "\x02");
+            return;
+        }
     });
 });
 
@@ -67,4 +82,3 @@ hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {
         common.botSay(target, helpString);
     }
 });
-

@@ -6,6 +6,7 @@ var header = {
 
 hook.on('initalize/prepare', function () {
     var configArr = config.getConfig();
+    configArr.necessaryModule.push("request");
     configArr.necessaryModule.push("cheerio");
     configArr.necessaryModule.push("html-entities");
     configArr.necessaryModule.push("iconv-lite");
@@ -18,6 +19,10 @@ hook.on('initalize/initalize', function () {
 });
 
 hook.on('common/parseChat', function (from, to, message) {
+    if (!toggleList.title) {
+        return;
+    }
+
     var target = common.defaultTarget(from, to);
 
     var url = message.trim().match(/https?:\/\/\S*/ig);
