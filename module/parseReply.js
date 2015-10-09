@@ -1,7 +1,16 @@
 function run (target, from, to, command) {
-    command = config.getConfig().others.commandPrefix + command.replaceAll("{from}", from, true).replaceAll("{to}", to, true);
+    var cmdPrefix = config.getConfig().others.commandPrefix;
+
+    command = cmdPrefix + command.replaceAll("{from}", from, true).replaceAll("{to}", to, true);
     command = command.replaceAll("{target}", target, true);
-    common.runCommand(from, to, command);
+
+    var temp = command.split(" ");
+    if (temp[0] == cmdPrefix + "bindsay" && temp[1] && temp[2]) {
+        common.botSay(temp[1], command.slice((temp[0] + " " + temp[1] + " ").length));
+        return;
+    } else {
+        common.runCommand(from, to, command);
+    }
 }
 
 hook.on('common/parseChat', function (from, to, message) {
