@@ -6,8 +6,8 @@
 
 console.log("* INITALIZING");
 
-config    = require("../config");
-common    = require("../common");
+config = require("../config");
+common = require("../common");
 
 /**
  * Set start time.

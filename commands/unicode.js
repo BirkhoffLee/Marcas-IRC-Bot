@@ -1,21 +1,8 @@
-var commandName      = "pagespeed";
+var commandName      = "unicode";
 var commandSudo      = false;
-var commandHelp      = "Get the PageSpeed score of the website by Google.";
-var commandUsage     = "[url]";
+var commandHelp      = "Converting unicodes.";
+var commandUsage     = "[unicode/ascii string]";
 var commandDisabled  = false;
-
-var apiURL;
-
-hook.on('initalize/initalize', function () {
-    var apiKeysArr = config.getConfig().apiKeys;
-    if (typeof apiKeysArr.pagespeed == "undefined" || apiKeysArr.pagespeed == "") {
-        commandDisabled = true;
-        console.log("* WARNING: Pagespeed API key not given".red);
-        return;
-    }
-
-    apiURL = 'https://www.googleapis.com/pagespeedonline/v2/runPagespeed?&locale=zh_TW&screenshot=false&fields=ruleGroups&key=' + apiKeysArr.pagespeed + '&url=';
-});
 
 hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     var target = common.defaultTarget(from, to);
@@ -33,21 +20,11 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         return false;
     }
 
-    _request(apiURL + args[1], function(err, response, body) {
-        if (err || response.statusCode != 200 || typeof JSON.parse(body).ruleGroups.SPEED.score == "undefined") {
-            common.botSay(target, common.mention(from) + "Something went wrong, try again later :(", "red");
-            return;
-        }
-
-        var score = JSON.parse(body).ruleGroups.SPEED.score;
-        common.botSay(target, common.mention(from) + "The PageSpeed score of \"" + args[1] + "\" is: " + score + '/100');
-    });
-});
-
-hook.on('initalize/prepare', function () {
-    var configArr = config.getConfig();
-    configArr.necessaryModule.push("request");
-    config.setConfig(configArr);
+    if (args[1].match(/^\\u/)) {
+        common.botSay(target, common.mention(from) + "Convert result for " + args[1] + ": " + unescape(args[1].match(/\\u[a-z0-9]{4}/i).toString().replace(/\\u/i,"%u")));
+    } else {
+        common.botSay(target, common.mention(from) + '\\u' + ('00' + args[1].charCodeAt(0).toString(16)).slice(-4));
+    }
 });
 
 hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {
@@ -77,4 +54,3 @@ hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {
         common.botSay(target, helpString);
     }
 });
-

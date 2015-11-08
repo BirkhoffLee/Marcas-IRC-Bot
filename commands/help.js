@@ -58,7 +58,7 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
                     commandHelps += ", " + _path.basename(path, '.js');
                 }
             })
-            common.botSay(target, common.mention(from) + "\x02Command lists (" + cmdPrefix + commandName + " <cmd> for further information): \x02" + commandHelps.slice(2));
+            common.botSay(target, common.mention(from) + "\x02Commands list (" + cmdPrefix + commandName + " <cmd> for further information): \x02" + commandHelps.slice(2));
         });
     }
 

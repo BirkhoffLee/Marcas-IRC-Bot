@@ -6,11 +6,22 @@ var commandDisabled  = false;
 
 function searchGoogle(keyword, callback){
     _google(keyword, function(err, next, links){
-        if (err || typeof links[0] == 'undefined') {
+        if (err) {
             callback(false);
-        } else {
-            callback([ links[0].title, links[0].link, links[0].description.slice( 0, 60 ) + "..." ]);
+            return;
         }
+
+        var result = [];
+
+        if (typeof links[0] != 'undefined') {
+            result.push([links[0].title, links[0].link, links[0].description]);
+        }
+
+        if (typeof links[1] != 'undefined') {
+            result.push([links[1].title, links[1].link, links[1].description]);
+        }
+
+        callback(result);
     });
 }
 
@@ -33,21 +44,26 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     var cmdPre = config.getConfig().others.commandPrefix;
     var param  = message.slice(cmdPre.length + commandName.length + 1);
 
-    // common.botSay(target, from + ": Please wait, this may take a long time...", "red");
-
     searchGoogle(param, function(result) {
-        if (result === false || result[0] == "" || result[1] == null || result[2] == "") {
+        if (result === false) {
             common.botSay(target, common.mention(from) + "Something went wrong, try again later :(", "red");
-        } else {
-            common.botSay(target, '[ ' + result[0] + ' ] - ' + result[1] + " : \x02" + result[2] + "\x02");
+            return;
         }
-        return;
+
+        if (result.length == 0) {
+            common.botSay(target, common.mention(from) + "Sorry, I cannot find anything about it on Google.", "red");
+            return;
+        }
+
+        result.forEach(function (resInfo) {
+            common.botSay(target, '[ ' + resInfo[0] + ' ] - ' + resInfo[1] + " : \x02" + resInfo[2] + "\x02", "", 2);
+            return;
+        });
     });
 });
 
 hook.on('initalize/prepare', function () {
     var configArr = config.getConfig();
-    configArr.necessaryModule.push("request");
     configArr.necessaryModule.push("google");
     config.setConfig(configArr);
 });

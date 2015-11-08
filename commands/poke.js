@@ -1,8 +1,14 @@
-var commandName      = "uptime";
+var commandName      = "poke";
 var commandSudo      = false;
-var commandHelp      = "Show my up time.";
-var commandUsage     = "";
+var commandHelp      = "Poke someone.";
+var commandUsage     = "[toPoke]";
 var commandDisabled  = false;
+
+var emojies = ["(`・ω・´)", "(´・ω・`)", "(́◉◞౪◟◉‵)", "(ﾟ∀。)", "(ゝ∀･)", "(σ′▽‵)′▽‵)σ", "σ ﾟ∀ ﾟ) ﾟ∀ﾟ)σ ", "ヾ(●゜▽゜●)♡ "];
+
+function randomEmoji () {
+    return emojies[Math.floor(Math.random() * emojies.length)];
+}
 
 hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     var target = common.defaultTarget(from, to);
@@ -15,39 +21,27 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         common.botSay(target, common.mention(from) + "Access Denied!", "red");
         return;
     }
-    var startTime  = config.getConfig().others.startTime;
-    var nowTime    = new Date().getTime() / 1000;
-
-    var seconds = Math.floor(nowTime - startTime);
-    var weeks = Math.floor((seconds % 31536000) / 86400 / 7);
-    var days = Math.floor((seconds % 31536000) / 86400 % 7);
-    var hours = Math.floor(((seconds % 31536000) % 86400) / 3600);
-    var minutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
-    var seconds = (((seconds % 31536000) % 86400) % 3600) % 60;
-
-    var minuteText = (minutes > 1) ? " minutes" : " minute";
-    var hourText   = (hours   > 1) ? " hours"   : " hour";
-    var dayText    = (days    > 1) ? " days"    : " day";
-    var weekText   = (weeks   > 1) ? " weeks"   : " week";
-    var uptime     = "";
-
-    if (weeks != 0) {
-        uptime += weeks + weekText + " ";
+    if (typeof args[1] == "undefined") {
+        common.botSay(target, "Usage: " + commandUsage, "red");
+        return false;
     }
-    if (days != 0 || weeks != 0) {
-        uptime += days + dayText + " ";
-    }
-    if (hours != 0 || days != 0 || weeks != 0) {
-        uptime += hours + hourText + " ";
-    }
-    if (minutes != 0 || hours != 0 || days != 0 || weeks != 0) {
-        uptime += minutes + minuteText;
-    }
-    // var uptime = weeks + weekText + days + dayText + hours + hourText + minutes + minuteText;
 
-    var uptimeText = "My uptime: " + uptime + ".";
+    var nick = args[1];
 
-    common.botSay(target, uptimeText);
+    if (!to.startsWith("#")) {
+        common.botSay(target, common.mention(from) + "Sorry, this command is not executed from PMs.", "red");
+        return;
+    }
+    if (common.isBanned(nick)) {
+        common.botSay(target, common.mention(from) + "Sorry, but " + nick + " is in my ban list.", "red");
+        return;
+    }
+    if (typeof Client.chans[to].users[nick] == "undefined") {
+        common.botSay(target, common.mention(from) + "Sorry, but I found that " + nick + " has not joined this channel yet.", "red");
+        return;
+    }
+
+    common.botSay(to, common.mention(nick) + "\x02" + from + "\x02 is poking you! " + randomEmoji());
 });
 
 hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {

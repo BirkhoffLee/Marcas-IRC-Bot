@@ -225,12 +225,13 @@ function reloadBotBanList () {
 
 /**
  * Say something
- * @param  {string} target  the target to say
- * @param  {string} content what to say
- * @param  {string} color   display color
+ * @param  {string}  target     the target to say
+ * @param  {string}  content    what to say
+ * @param  {string}  color      display color
+ * @param  {boolean} singleLine just say a line
  * @return {boolean}
  */
-function botSay (target, content, color) {
+function botSay (target, content, color, singleLine) {
     hook.emit("common/botSay", target, content, color);
     var colors = config.getConfig().others.botSayColors;
 
@@ -242,6 +243,10 @@ function botSay (target, content, color) {
 
     var say = color + content.replaceAll("\n", "\n" + color, true);
     try {
+        if (singleLine) {
+            return Client.say(target, say, singleLine);
+        }
+
         return Client.say(target, say);
     } catch(e) {
         console.log("* WARNING: ERROR SENDING MESSAGE".red);

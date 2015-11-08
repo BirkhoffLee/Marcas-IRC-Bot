@@ -3,6 +3,8 @@ var commandSudo      = false;
 var commandHelp      = "Give you something you may have interest to.";
 var commandUsage     = "";
 var commandDisabled  = false;
+var shortenURL       = true;
+var shortenAPIURL;
 
 var feedList = [
     "http://feeds.feedburner.com/freegroup/",
@@ -10,12 +12,41 @@ var feedList = [
     "http://chinese.engadget.com/rss.xml",
     "http://www.ithome.com.tw/rss",
     "http://pansci.tw/feed"
-    // "https://blog.birkhoff.me/rss/"
 ];
+
+function randArray (data) {
+    /* from: http://www.uw3c.com/jsviews/js39.html */
+    var arrlen = data.length;
+    var try1 = new Array();
+    for(var i = 0;i < arrlen; i++){
+        try1[i] = i;
+    }
+    var try2 = new Array();
+    for(var i = 0;i < arrlen; i++){
+        try2[i] = try1.splice(Math.floor(Math.random() * try1.length),1);
+    }
+    var try3 = new Array();
+    for(var i = 0; i < arrlen; i++){
+        try3[i] = data[try2[i]];
+    }
+    return try3;
+}
+
+hook.on('initalize/initalize', function () {
+    var apiKeysArr = config.getConfig().apiKeys;
+    if (typeof apiKeysArr.goo_gl == "undefined" || apiKeysArr.goo_gl == "") {
+        commandDisabled = true;
+        console.log("* WARNING: goo.gl API key not given".red);
+        return;
+    }
+
+   shortenAPIURL = 'https://www.googleapis.com/urlshortener/v1/url?key=' + apiKeysArr.goo_gl;
+});
 
 hook.on('initalize/prepare', function () {
     var configArr = config.getConfig();
     configArr.necessaryModule.push("feed-read");
+    configArr.necessaryModule.push("request");
     config.setConfig(configArr);
 });
 
@@ -31,14 +62,39 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         return;
     }
 
-    feedList.forEach(function (feedURL) {
+    if (to.startsWith("#")) {
+        common.botSay(target, common.mention(from) + "Explore data are sent as private messages.", "green");
+    }
+
+    randArray(feedList).forEach(function (feedURL) {
         _feed_read (feedURL, function(err, articles) {
             if (err) {
                 console.log("* WARNING: Unable to get the feed info of %s. ".red, feedURL);
                 return;
             }
             var i = articles[Math.floor(Math.random() * articles.length)];
-            common.botSay(target, "［ \x02" + i.title + "\x02 ］－  \x02" + i.link + "\x02");
+            if (shortenURL) {
+                var data = {
+                    uri: shortenAPIURL.trim(),
+                    json: {
+                        "longUrl": i.link.trim()
+                    }
+                };
+
+                _request.post(data, function(err, response, body) {
+                    if (!err && response.statusCode == 200 && typeof body.id != "undefined") {
+                        if (to.startsWith("#")) {
+                            common.botSay(from, "［ \x02" + i.title + "\x02 ］－  \x02" + body.id + "\x02");
+                        } else {
+                            common.botSay(target, "［ \x02" + i.title + "\x02 ］－  \x02" + body.id + "\x02");
+                        }
+                    }
+                });
+            } else if (to.startsWith("#")) {
+                common.botSay(from, "［ \x02" + i.title + "\x02 ］－  \x02" + i.link + "\x02");
+            } else {
+                common.botSay(target, "［ \x02" + i.title + "\x02 ］－  \x02" + i.link + "\x02");
+            }
         });
     });
 });

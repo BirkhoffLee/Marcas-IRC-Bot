@@ -1,18 +1,8 @@
 var commandName      = "wiki";
 var commandSudo      = false;
-var commandHelp      = "Search something on English Wikipedia.";
+var commandHelp      = "Search something on Chinese Wikipedia.";
 var commandUsage     = "[keyword]";
 var commandDisabled  = false;
-
-function searchGoogle(keyword, callback){
-    _google(keyword, function(err, next, links){
-        if (err || typeof links[0] == 'undefined') {
-            callback(false);
-        } else {
-            callback([ links[0].title, links[0].link, links[0].description.slice( 0, 60 ) + "..." ]);
-        }
-    });
-}
 
 hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     var target = common.defaultTarget(from, to);
@@ -30,61 +20,43 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         return false;
     }
 
-    // common.botSay(target, from + ": Please wait, this may take a long time...", "red");
+    var cmdPre   = config.getConfig().others.commandPrefix;
+    var toSearch = message.slice(cmdPre.length + commandName.length + 1);
 
-    var request = _request;
-    var cmdPre = config.getConfig().others.commandPrefix;
-    var param  = message.slice(cmdPre.length + commandName.length + 1);
-    var baseurl = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=";
-    var triggerKey = [" may refer to:", "This is a redirect from a title with another method of capitalisation."];
-    var titleDetect = " - Wikipedia, the free encyclopedia";
-    var searchPrefix = "site:en.wikipedia.org intitle:";
-    var error0 = "Sorry, I found nothing about \x02\"{keyword}\"\x02 on English Wikipedia.";
-    var error1 = error0 + " But I found something like \x02\"{keyword}\"\x02. Check it out by yourself on English Wikipedia!";
-    var error2 = "Sorry, please check it out by yourself on English Wikipedia!";
-    var originParam = param;
-
-    request (baseurl + param, function(error, response, str) {
-        str = JSON.parse(str);
-        if (typeof str.query.pages['-1'] !== 'undefined') {
-            common.botSay(target, error0.replace("{keyword}", param), "red");
-            return false;
-        }
-
-        for (var pageID in str.query.pages) {
-            var result = str.query.pages[pageID].extract.split('\n')[0];
-
-            if (result.slice(-14) == triggerKey[0] || result.slice(0, 70) == triggerKey[1] || result == "") {
-                // Try get the correct keyword from google and wiki it again
-                searchGoogle(searchPrefix + param, function(googleResult) {
-                    if (googleResult === false) {
-                        common.botSay(target, error1.replaceAll("{keyword}", param), "red");
-                        return false;
-                    }
-
-                    param = googleResult[0].split(titleDetect)[0];
-                    request (baseurl + param, function(error, response, str) {
-                        str = JSON.parse(str);
-                        if (typeof str.query.pages['-1'] !== 'undefined') {
-                            common.botSay(target, error0.replace("{keyword}", originParam), "red");
-                            return false;
-                        }
-
-                        for (var pageID in str.query.pages) {
-                            var result = str.query.pages[pageID].extract.split('\n')[0];
-                            if (result.slice(-14) == triggerKey[0] || result.slice(0, 70) == triggerKey[1]) {
-                                common.botSay(target, error2, "red");
-                            } else {
-                                common.botSay(target, result.slice(0, 243) + "...");
-                            }
-                        }
-                    });
-                });
+    // From: https://github.com/james58899/oktw/blob/master/modules/wiki.js
+    var search = "https://zh.wikipedia.org/w/api.php?format=json&action=query&list=search&srlimit=1&srprop&continue&srsearch=" + encodeURI(toSearch);
+    _request (search, function(err, response, body) {
+        if (!err && response.statusCode == 200) {
+            if (typeof JSON.parse(body).query.search[0] != "undefined" && typeof JSON.parse(body).query.search[0].title != "undefined") {
+                var title = JSON.parse(body).query.search[0].title;
             } else {
-                common.botSay(target, result.slice(0, 243) + "...");
+                common.botSay(target, common.mention(from) + "\x02Sorry, I found nothing about that on Chinese Wikipedia.\x02", "red");
+                return;
             }
-            break;
-        }
+
+            var options = {
+                url: "https://zh.wikipedia.org/w/api.php?format=json&utf8&action=query&prop=extracts&exintro&explaintext&exchars=130&redirects&titles=" + encodeURI(title),
+                gzip: true,
+                headers: {
+                    "Accept-Language": "zh-TW,zh;q=0.8,en-US;q=0.5,en;q=0.3"
+                }
+            };
+            _request(options, function(err, response, body) {
+                if (!err && response.statusCode == 200) {
+                    var data = JSON.parse(body);
+                    if (Object.keys(data.query.pages)) {
+                        var firstResult = Object.keys(data.query.pages);
+                        common.botSay(target, data.query.pages[firstResult[0]].extract + '\nhttp://zh.wikipedia.org/wiki/' + title.replace(/\s/g, '_'));
+                    } else {
+                        common.botSay(target, common.mention(from) + "Sorry, I found nothing about that on Chinese Wikipedia.");
+                        return;
+                    }
+                } else {
+                    common.botSay(target, common.mention(from) + "Sorry, I found nothing about that on Chinese Wikipedia.");
+                    return;
+                }
+            })
+         }
     });
 });
 

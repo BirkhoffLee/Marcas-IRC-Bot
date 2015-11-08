@@ -1,6 +1,6 @@
-var commandName      = "checkadmin";
-var commandSudo      = false;
-var commandHelp      = "Check if you have admin permission.";
+var commandName      = "togglelist";
+var commandSudo      = true;
+var commandHelp      = "Shows the toggle features status.";
 var commandUsage     = "";
 var commandDisabled  = false;
 
@@ -10,14 +10,24 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     if (args[0] != commandName || commandDisabled) {
         return;
     }
-
-    if (!isAdmin) {
-        common.botSay(target, common.mention(from) + "You aren't my administrator.", "red");
-        return;
-    } else {
-        common.botSay(target, common.mention(from) + "You are identified as an administrator of mine.", "green");
+    if (commandSudo && !isAdmin) {
+        console.log("* WARNING: Unauthorized sudo request from %s".red, from);
+        common.botSay(target, common.mention(from) + "Access Denied!", "red");
         return;
     }
+
+    if (to.startsWith("#")) {
+        common.botSay(target, common.mention(from) + "Status list is sent as private messages.", "green");
+        target = from;
+    }
+
+    database.toggle.find({}, function (err, docs) {
+        if (docs.length != 0) {
+            docs.forEach(function (doc) {
+                common.botSay(target, "Feature \"" + doc.name + "\" is \x02" + doc.status.toString().replace("true", "on").replace("false", "off") + "\x02.");
+            });
+        }
+    });
 });
 
 hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {

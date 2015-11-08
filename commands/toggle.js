@@ -1,11 +1,37 @@
 var commandName      = "toggle";
 var commandSudo      = true;
-var commandHelp      = "Toggle features.";
+var commandHelp      = "Toggle features on/off.";
 var commandUsage     = "[toggleName]";
 var commandDisabled  = false;
 
 hook.on('initalize/initalize', function () {
-    toggleList = config.getConfig().others.toggleList;
+    toggleList = {};
+    database["toggle"] = new _nedb({ filename: 'botToggles.db'});
+    database.toggle.loadDatabase(function (error) {
+        if (error) {
+            console.log("* ERROR LOADING TOGGLELIST DATABASE. EXITING");
+            process.exit(1);
+        }
+
+        database.toggle.find({}, function (err, docs) {
+            if (docs.length == 0) {
+                _toggleList = config.getConfig().others.toggleList;
+                for (var name in _toggleList) {
+                    var data = {
+                        name: name,
+                        status: _toggleList[name]
+                    };
+                    database.toggle.insert(data);
+                }
+                return;
+            }
+
+            toggleList = {};
+            docs.forEach(function (doc) {
+                toggleList[doc.name] = doc.status;
+            });
+        });
+    });
 });
 
 hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
@@ -25,17 +51,31 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     }
 
     var name = args[1];
-    if (typeof toggleList[name] == "undefined") {
-        common.botSay(target, common.mention(from) + "Feature not found.", "red");
-        return;
-    }
+    database.toggle.find({name: name}, function (err, docs) {
+        if (docs.length != 0) {
+            if (docs[0].status == true) {
+                var turnto = false;
+            } else {
+                var turnto = true;
+            }
+            database.toggle.update({name: name}, {$set: {name: name, status: turnto}}, {}, function (err, numReplaced) {
+                if (!err) {
+                    database.toggle.find({}, function (err, docs) {
+                        toggleList = {};
+                        docs.forEach(function (doc) {
+                            toggleList[doc.name] = doc.status;
+                        });
+                    });
 
-    if (toggleList[name] == true) {
-        toggleList[name] = false;
-    } else {
-        toggleList[name] = true;
-    }
-    common.botSay(target, common.mention(from) + "The value of '" + name + "' changed to " + toggleList[name].toString() + ".", "blue");
+                    common.botSay(target, common.mention(from) + "The value of '" + name + "' changed to " + turnto.toString() + ".", "blue");
+                } else {
+                    common.botSay(target, common.mention(from) + "Operation failure!", "red");
+                }
+            });
+        } else {
+            common.botSay(target, common.mention(from) + "Feature not found!", "red");
+        }
+    });
 });
 
 hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {

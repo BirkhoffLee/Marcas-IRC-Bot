@@ -1,10 +1,20 @@
 var commandName      = "translate";
 var commandSudo      = false;
-var commandHelp      = "Translating. Lang codes: http://goo.gl/G7X10Y";
+var commandHelp      = "Translating using Baidu. Lang codes: http://goo.gl/G7X10Y";
 var commandUsage     = "[originLang] [toLang] [toTranslate]";
 var commandDisabled  = false;
-var apiKey           = "cXIQ4Et4u76UiIKI9UFEimK8";  // http://goo.gl/C8GpPl
-var apiUrl           = "http://openapi.baidu.com/public/2.0/bmt/translate?client_id={apikey}&q={totrans}&from={from}&to={to}";
+var apiURL;
+
+hook.on('initalize/initalize', function () {
+    var apiKeysArr = config.getConfig().apiKeys;
+    if (typeof apiKeysArr.baidu_translate == "undefined" || apiKeysArr.baidu_translate == "") {
+        commandDisabled = true;
+        console.log("* WARNING: Baidu Translate API key not given".red);
+        return;
+    }
+
+   apiURL = "http://openapi.baidu.com/public/2.0/bmt/translate?client_id={apikey}&q={totrans}&from={from}&to={to}".replaceAll("{apikey}", apiKeysArr.baidu_translate, true);
+});
 
 hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     var target = common.defaultTarget(from, to);
@@ -38,9 +48,11 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         tfrom = "cht";
     }
 
-    var url = apiUrl.replace("{apikey}", apiKey).replace("{from}", tfrom).replace("{to}", to).replace("{totrans}", totrans);
+    apiURL = apiURL.replaceAll("{totrans}", totrans, true)
+                    .replaceAll("{from}", tfrom, true)
+                    .replaceAll("{to}", to, true);
 
-    _request(url, function (error, response, body) {
+    _request(apiURL, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             var json = JSON.parse(body);
 

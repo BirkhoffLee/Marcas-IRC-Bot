@@ -4,8 +4,7 @@ var commandHelp      = "Weather information.";
 var commandUsage     = "[cityName]";
 var commandDisabled  = false;
 
-var apiKey           = "";
-var apiAllurl        = "https://api.thinkpage.cn/v2/weather/all.json?city={city}&language=zh-cht&unit=c&aqi=&alarm=0&key=" + apiKey;
+var apiAllurl;
 var cities = {
     "台北|臺北": "Taipei"  ,  "桃園": "Taoyuan" ,
     "新竹"     : "Xinzhu"  ,  "宜蘭": "Yilan"   ,
@@ -16,10 +15,16 @@ var cities = {
     "南投"     : "Nantou"  ,  "花蓮": "Hualian" ,  "雲林": "Yunlin"
 };
 
-if (apiKey == "") {
-    commandDisabled = true;
-    console.log("* WARNING: Weather api key not given".red);
-}
+hook.on('initalize/initalize', function () {
+    var apiKeysArr = config.getConfig().apiKeys;
+    if (typeof apiKeysArr.thinkpage_weather == "undefined" || apiKeysArr.thinkpage_weather == "") {
+        commandDisabled = true;
+        console.log("* WARNING: Weather API key not given".red);
+        return;
+    }
+
+    apiAllurl = "https://api.thinkpage.cn/v2/weather/all.json?city={city}&language=zh-cht&unit=c&aqi=&alarm=0&key=" + apiKeysArr.thinkpage_weather;
+});
 
 hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     var target = common.defaultTarget(from, to);

@@ -3,9 +3,18 @@ var commandSudo      = false;
 var commandHelp      = "Shorten a URL. (goo.gl)";
 var commandUsage     = "[url]";
 var commandDisabled  = false;
+var apiURL;
 
-var apiKey           = "AIzaSyAN9jpAbECwgAI4yy8lkFKUpEV6D6ajAXA"
-var apiURL           = 'https://www.googleapis.com/urlshortener/v1/url?key=' + apiKey;
+hook.on('initalize/initalize', function () {
+    var apiKeysArr = config.getConfig().apiKeys;
+    if (typeof apiKeysArr.goo_gl == "undefined" || apiKeysArr.goo_gl == "") {
+        commandDisabled = true;
+        console.log("* WARNING: goo.gl API key not given".red);
+        return;
+    }
+
+   apiURL = 'https://www.googleapis.com/urlshortener/v1/url?key=' + apiKeysArr.goo_gl;
+});
 
 hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     var target = common.defaultTarget(from, to);

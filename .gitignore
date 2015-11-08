@@ -1,5 +1,8 @@
 config.js
+apiKeys.js
+
+botBanList.db
+botToggles.db
+
 start.bat
 colors.bat
-colors.js
-botBanList.db

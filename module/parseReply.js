@@ -45,10 +45,10 @@ hook.on('common/parseChat', function (from, to, message) {
             commands.forEach(function (command) {
                 if (!first) {
                     first = true;
-                    run(target, from, to, command);
+                    run (target, from, to, command);
                 } else {
                     setTimeout(function () {
-                        run(target, from, to, command);
+                        run (target, from, to, command);
                     }, 700);
                 }
             });
