@@ -10,7 +10,12 @@ function parseTitle (thisUrl, target, response, body) {
 
     var host = (toggleList.titlestricturl && response.request.host) ? response.request.host.trim() : thisUrl.match(/https?:\/\/([^\/]+)\/?/i)[1].trim();
 
-    var charset = _node_icu_charset_detector.detectCharset(body);
+    try {
+        var charset = _node_icu_charset_detector.detectCharset(body);
+    } catch(e) {
+        var charset = "UTF-8";
+    }
+
     if (charset != "UTF-8") {
         var str = _iconv_lite.decode(body, charset).toString().trim();
         console.log("[%s] Converted to " + charset + ".", thisUrl);
@@ -19,15 +24,18 @@ function parseTitle (thisUrl, target, response, body) {
         console.log("[%s] Not converted.", thisUrl);
     }
 
-    $ = _cheerio.load(str, {
-        decodeEntities: true
-    });
+    $ = _cheerio.load(str);
 
-    var title = $('title').text().trim().replace(/\n/g, ' ');
+    var title = _entities.decode($('title').text().trim().replace(/\n/g, ' '));
     if (title != "") {
         common.botSay(target, "［ \x02" + title + "\x02 ］－ \x02" + host + "\x02");
     }
 }
+
+hook.on('initalize/initalize', function () {
+    var htmlEntities = _html_entities.XmlEntities;
+        _entities    = new htmlEntities();
+});
 
 hook.on('initalize/prepare', function () {
     var configArr = config.getConfig();
@@ -35,6 +43,7 @@ hook.on('initalize/prepare', function () {
     configArr.necessaryModule.push("cheerio");
     configArr.necessaryModule.push("iconv-lite");
     configArr.necessaryModule.push("node-icu-charset-detector");
+    configArr.necessaryModule.push("html-entities");
     config.setConfig(configArr);
 });
 

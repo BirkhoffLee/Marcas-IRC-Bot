@@ -46,7 +46,7 @@ var config = {
         /*
           The version of Marcas.
          */
-        version: "2.3.3",
+        version: "2.3.5",
 
         /*
           Password for NickServ.

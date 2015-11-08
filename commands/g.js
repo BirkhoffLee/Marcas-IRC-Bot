@@ -14,10 +14,29 @@ function searchGoogle(keyword, callback){
         var result = [];
 
         if (typeof links[0] != 'undefined') {
+            if (typeof links[0].title == 'undefined') {
+                return;
+            }
+            if (typeof links[0].link == 'undefined') {
+                return;
+            }
+            if (typeof links[0].description == 'undefined') {
+                return;
+            }
+
             result.push([links[0].title, links[0].link, links[0].description]);
         }
 
         if (typeof links[1] != 'undefined') {
+            if (typeof links[1].title == 'undefined') {
+                return;
+            }
+            if (typeof links[1].link == 'undefined') {
+                return;
+            }
+            if (typeof links[1].description == 'undefined') {
+                return;
+            }
             result.push([links[1].title, links[1].link, links[1].description]);
         }
 
