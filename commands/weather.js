@@ -2,17 +2,17 @@ var commandName      = "weather";
 var commandSudo      = false;
 var commandHelp      = "Weather information.";
 var commandUsage     = "[cityName]";
-var commandDisabled  = false;
+var commandDisabled  = true;
 
 var apiAllurl;
 var cities = {
-    "台北|臺北": "Taipei"  ,  "桃園": "Taoyuan" ,
-    "新竹"     : "Xinzhu"  ,  "宜蘭": "Yilan"   ,
-    "高雄"     : "Gaoxiong",  "嘉義": "Jiayi"   ,
-    "台南"     : "Tainan"  ,  "台東": "Taidong" ,
-    "屏東"     : "Pingdong",  "台中": "Taizhong",
-    "苗栗"     : "Miaoli"  ,  "彰化": "Zhanghua",
-    "南投"     : "Nantou"  ,  "花蓮": "Hualian" ,  "雲林": "Yunlin"
+    "台北|臺北": "Taipei"  ,  "桃園"     : "Taoyuan" ,
+    "新竹"     : "Xinzhu"  ,  "宜蘭"     : "Yilan"   ,
+    "高雄"     : "Gaoxiong",  "嘉義"     : "Jiayi"   ,
+    "台南|臺南": "Tainan"  ,  "台東|臺東": "Taidong" ,
+    "屏東"     : "Pingdong",  "台中|臺中": "Taizhong",
+    "苗栗"     : "Miaoli"  ,  "彰化"     : "Zhanghua",
+    "南投"     : "Nantou"  ,  "花蓮"     : "Hualian" ,  "雲林": "Yunlin"
 };
 
 hook.on('initalize/initalize', function () {

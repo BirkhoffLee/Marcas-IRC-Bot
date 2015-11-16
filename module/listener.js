@@ -15,6 +15,7 @@ hook.on("initalize/addListener", function() {
         * @return {void}
         */
         message:    function(from, to, message) {
+                        message = message.replace(/((?:\u0003\d\d?,\d\d?|\u0003\d\d?|\u0002|\u001d|\u000f|\u0016|\u001f))/g, '');
                         hook.emit("listeners/message", from, to, message);
                     },
 

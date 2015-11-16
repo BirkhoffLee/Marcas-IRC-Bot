@@ -15,6 +15,7 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         common.botSay(target, common.mention(from) + "Access Denied!", "red");
         return;
     }
+
     var startTime  = config.getConfig().others.startTime;
     var nowTime    = new Date().getTime() / 1000;
 
@@ -29,23 +30,38 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     var hourText   = (hours   > 1) ? " hours"   : " hour";
     var dayText    = (days    > 1) ? " days"    : " day";
     var weekText   = (weeks   > 1) ? " weeks"   : " week";
-    var uptime     = "";
+    var uptime     = [];
+    var uptimeText = "";
 
     if (weeks != 0) {
-        uptime += weeks + weekText + " ";
+        uptime.push(weeks + weekText);
     }
     if (days != 0 || weeks != 0) {
-        uptime += days + dayText + " ";
+        uptime.push(days + dayText);
     }
     if (hours != 0 || days != 0 || weeks != 0) {
-        uptime += hours + hourText + " ";
+        uptime.push(hours + hourText);
     }
     if (minutes != 0 || hours != 0 || days != 0 || weeks != 0) {
-        uptime += minutes + minuteText;
+        uptime.push(minutes + minuteText);
     }
-    // var uptime = weeks + weekText + days + dayText + hours + hourText + minutes + minuteText;
+    if (minutes == 0 && hours == 0 && days == 0 && weeks == 0) {
+        uptime    = [];
+        uptime[0] = "less than a minute";
+    }
 
-    var uptimeText = "My uptime: " + uptime + ".";
+    if (uptime.length >= 2) {
+        uptime[uptime.length - 2] = "and";
+    }
+    uptime.forEach(function (text) {
+        if (text.startsWith("0")) {
+            return;
+        }
+
+        uptimeText += text + " ";
+    });
+
+    var uptimeText = "I've been here for " + uptimeText.trim() + ".";
 
     common.botSay(target, uptimeText);
 });

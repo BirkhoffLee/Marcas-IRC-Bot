@@ -35,8 +35,8 @@ var config = {
          */
         port: 6697,
         secure: true,
-        floodProtection: false,
-        floodProtectionDelay: 0,
+        floodProtection: true,
+        floodProtectionDelay: 1000,
         autoRejoin: true,
         debug: true,
         showErrors: false  // node-irc 0.3.12 irc.js:591
@@ -46,7 +46,7 @@ var config = {
         /*
           The version of Marcas.
          */
-        version: "2.3.5",
+        version: "2.3.6",
 
         /*
           Password for NickServ.

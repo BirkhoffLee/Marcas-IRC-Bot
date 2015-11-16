@@ -17,8 +17,8 @@ function defaultTarget (from, to) {
 
 /**
  * Checks if someone got banned.
- * @param  {string}  nick
- * @return {Boolean}
+ * @param  {string}   nick
+ * @return {boolean}
  */
 function isBanned (nick) {
     if (typeof botBanList == "undefined") {
