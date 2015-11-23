@@ -1,3 +1,7 @@
+/* global hook */
+/* global common */
+/* global config */
+
 /**
  * IRC Server nick identify
  *
@@ -13,12 +17,12 @@ hook.on('initalize/initalize', function () {
 
 hook.on('listeners/join', function (channel, nick, message) {
     if (nick == config.botName) {
-        if (!config.getConfig().others.sentIdentify && botConfig.identify != "") {
+        if (!config.getConfig().others.sentIdentify && config.getConfig().others.identify != "") {
             var configArr = config.getConfig();
             configArr.others.sentIdentify = true;
             config.setConfig(configArr);
 
-            common.botSay("NickServ", "identify " + botConfig.identify, "none");
+            common.botSay("NickServ", "identify " + config.getConfig().others.identify, "none");
         }
     }
 });
@@ -31,13 +35,13 @@ hook.on('listeners/notice', function (nick, to, text, message) {
             var configArr = config.getConfig();
             configArr.others.identified = true;
             config.setConfig(configArr);
-            console.log( " * Identified.".red );
+            util.log( " * Identified.".red );
 
         } else if (!text.startsWith("This nickname is registered. Please choose ")) {
 
             var warn = "WARNING: NickServ sent a message: " + text;
             config.getConfig().others.admin.forEach(function (admin) {
-                console.log( (" * " + warn).red );
+                util.log( (" * " + warn).red );
                 common.botSay(admin, warn, "red");
             });
 

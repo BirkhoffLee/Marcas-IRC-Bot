@@ -1,10 +1,10 @@
 hook.on('listeners/error', function (from, to, message) {
     if (typeof message == "undefined") {
-        console.log( "* WARNING: Server sent an error message!".red );
+        util.log( "* WARNING: Server sent an error message!".red );
         return;
     }
 
-    console.log( "* WARNING: Server sent an error message:".red );
+    util.log( "* WARNING: Server sent an error message:".red );
 
     switch (typeof message) {
         case "object":
@@ -12,7 +12,7 @@ hook.on('listeners/error', function (from, to, message) {
             break;
 
         default:
-            console.log(message);
+            util.log(message);
             break;
     }
 });

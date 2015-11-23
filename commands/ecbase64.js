@@ -1,3 +1,5 @@
+/* global Buffer */
+
 var commandName      = "ecbase64";
 var commandSudo      = false;
 var commandHelp      = "Encode a string to base64-encoded.";
@@ -11,7 +13,7 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         return;
     }
     if (commandSudo && !isAdmin) {
-        console.log("* WARNING: Unauthorized sudo request from %s".red, from);
+        util.log(("* WARNING: Unauthorized sudo request from " + from).red);
         common.botSay(target, common.mention(from) + "Access Denied!", "red");
         return;
     }
@@ -21,13 +23,13 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     }
 
     var cmdPre = config.getConfig().others.commandPrefix;
-    var key    = args[1];
     var value  = message.slice(cmdPre.length + commandName.length + 1);
 
     common.botSay(target, new Buffer(value).toString('base64'));
 });
 
 hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {
+    /* DO NOT TOUCH THIS */
     if (typeof commandName  == "undefined" || typeof commandSudo  == "undefined" ||
         typeof commandHelp  == "undefined" || typeof commandUsage == "undefined") {
         return;

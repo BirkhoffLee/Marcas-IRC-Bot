@@ -11,7 +11,7 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         return;
     }
     if (commandSudo && !isAdmin) {
-        console.log("* WARNING: Unauthorized sudo request from %s".red, from);
+        util.log(("* WARNING: Unauthorized sudo request from " + from).red);
         common.botSay(target, common.mention(from) + "Access Denied!", "red");
         return;
     }
@@ -23,14 +23,15 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     if (args[1] != Client.nick) {
         Client.send("nick", args[1]);
         // common.botSay(target, common.mention(from) + "My nickname is changed to " + args[1]);
-        console.log("* WARNING: Unauthorized sudo request from %s".red, from);
+        util.log(("* WARNING: Unauthorized sudo request from " + from).red);
     } else {
         // common.botSay(target, common.mention(from) + "My nickname is already " + args[1]);
-        console.log("* WARNING: Nickname changed to %s by %s".red, args[1], from);
+        util.log(("* WARNING: My nickname changed to " + args[1] + " by " + from).red);
     }
 });
 
 hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {
+    /* DO NOT TOUCH THIS */
     if (typeof commandName  == "undefined" || typeof commandSudo  == "undefined" ||
         typeof commandHelp  == "undefined" || typeof commandUsage == "undefined") {
         return;

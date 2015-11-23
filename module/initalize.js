@@ -1,10 +1,21 @@
+/* global util */
+/* global _nedb */
+/* global config */
+/* global database */
+/* global common */
+/* global hook */
+/* global process */
+
 /**
  * Marcas initalizing
  *
  * A boy IRC bot.
  */
 
-console.log("* INITALIZING");
+util = require('util');
+
+util.log("* INITALIZING");
+util.log("* INITALIZING: LOADED MODULE: util");
 
 config = require("../config");
 common = require("../common");
@@ -45,7 +56,7 @@ config.getConfig().necessaryModule.forEach(function (moduleName) {
             require.resolve(moduleName);
 
             eval("_" + moduleName.replaceAll('-', "_") + " = require('" + moduleName + "')");
-            console.log("* INITALIZING: LOADED MODULE: " + moduleName);
+            util.log("* INITALIZING: LOADED MODULE: " + moduleName);
             loadedModules.push(moduleName)
         }
     } catch(e) {
@@ -58,7 +69,7 @@ config.getConfig().necessaryModule.forEach(function (moduleName) {
                 neededModules.push(moduleName);
             }
         });
-        console.log(neededModules.join(" "));
+        util.log(neededModules.join(" "));
 
         process.exit(e.code);
     }

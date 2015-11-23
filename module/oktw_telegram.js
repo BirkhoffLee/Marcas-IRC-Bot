@@ -3,7 +3,7 @@ hook.on('listeners/message', function (from, to, message) {
     if (from == "oktw" && result !== null) {
         from = result[1]; message = result[2];
 
-        console.log("* TELEGRAM_CHAT: %s => %s: %s", from, to, message);
+        util.log("* TELEGRAM_CHAT: " + from + " => " + to + ": " + message);
         common.parseChat(from, to, message);
         return;
     }

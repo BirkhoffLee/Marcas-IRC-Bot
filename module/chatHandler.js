@@ -3,6 +3,6 @@ hook.on('listeners/message', function (from, to, message) {
         return;
     }
 
-    console.log("* CHAT: %s => %s: %s", from, to, message);
+    util.log("* CHAT: " + from + " => " + to + ": " + message);
     common.parseChat(from, to, message);
 });

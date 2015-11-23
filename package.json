@@ -1,6 +1,6 @@
 {
   "name": "Marcas-IRC-Bot",
-  "version": "2.3.6",
+  "version": "2.3.7",
   "description": "A boy IRC bot.",
   "main": "start.js",
   "scripts": {

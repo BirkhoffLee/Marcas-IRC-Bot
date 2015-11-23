@@ -24,13 +24,15 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         return;
     }
     if (commandSudo && !isAdmin) {
-        console.log("* WARNING: Unauthorized sudo request from %s".red, from);
+        util.log(("* WARNING: Unauthorized sudo request from " + from).red);
         common.botSay(target, common.mention(from) + "Access Denied!", "red");
         return;
     }
 
+    var result = "";
+
     if (Client.chans.length == 1) {
-        var result = common.mention(from) + "I have joined " + Client.chans + " .";
+        result = common.mention(from) + "I have joined " + Client.chans + " .";
     } else {
         var channels = "";
 
@@ -41,13 +43,14 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         channels = channels.slice(6);
         channels = allButLast(channels, ", and ", ', ', 1);
 
-        var result = common.mention(from) + "I have joined these channels: \x02" + channels + "\x02.";
+        result = common.mention(from) + "I have joined these channels: \x02" + channels + "\x02.";
     }
 
     common.botSay(target, result);
 });
 
 hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {
+    /* DO NOT TOUCH THIS */
     if (typeof commandName  == "undefined" || typeof commandSudo  == "undefined" ||
         typeof commandHelp  == "undefined" || typeof commandUsage == "undefined") {
         return;

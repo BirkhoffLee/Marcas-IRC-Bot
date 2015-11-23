@@ -46,7 +46,7 @@ var config = {
         /*
           The version of Marcas.
          */
-        version: "2.3.6",
+        version: "2.3.7",
 
         /*
           Password for NickServ.
@@ -101,6 +101,11 @@ var config = {
           0: unlimited
          */
         maxListeners: 0,
+
+        /**
+         * Do not touch this.
+         */
+        runMode: process.env.NODE_ENV,
 
         /*
           Do not touch this if you don't

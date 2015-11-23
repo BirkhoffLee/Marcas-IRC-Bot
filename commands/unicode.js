@@ -11,7 +11,7 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         return;
     }
     if (commandSudo && !isAdmin) {
-        console.log("* WARNING: Unauthorized sudo request from %s".red, from);
+        util.log(("* WARNING: Unauthorized sudo request from " + from).red);
         common.botSay(target, common.mention(from) + "Access Denied!", "red");
         return;
     }
@@ -28,6 +28,7 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
 });
 
 hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {
+    /* DO NOT TOUCH THIS */
     if (typeof commandName  == "undefined" || typeof commandSudo  == "undefined" ||
         typeof commandHelp  == "undefined" || typeof commandUsage == "undefined") {
         return;

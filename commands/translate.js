@@ -9,7 +9,7 @@ hook.on('initalize/initalize', function () {
     var apiKeysArr = config.getConfig().apiKeys;
     if (typeof apiKeysArr.baidu_translate == "undefined" || apiKeysArr.baidu_translate == "") {
         commandDisabled = true;
-        console.log("* WARNING: Baidu Translate API key not given".red);
+        util.log("* WARNING: Baidu Translate API key not given".red);
         return;
     }
 
@@ -23,7 +23,7 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         return;
     }
     if (commandSudo && !isAdmin) {
-        console.log("* WARNING: Unauthorized sudo request from %s".red, from);
+        util.log(("* WARNING: Unauthorized sudo request from " + from).red);
         common.botSay(target, common.mention(from) + "Access Denied!", "red");
         return;
     }
@@ -76,6 +76,7 @@ hook.on('initalize/prepare', function () {
 });
 
 hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {
+    /* DO NOT TOUCH THIS */
     if (typeof commandName  == "undefined" || typeof commandSudo  == "undefined" ||
         typeof commandHelp  == "undefined" || typeof commandUsage == "undefined") {
         return;

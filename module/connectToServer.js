@@ -1,3 +1,8 @@
+/* global config */
+/* global Client */
+/* global hook */
+/* global _irc */
+
 /**
  * Connecting to IRC Server.
  *

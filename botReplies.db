@@ -1,10 +1,13 @@
+{"created":1446551701194,"content":"$BOTNAME$:$SP$(hi|hello|hey)","reply":"Hello!","by":"BirkhoffLee","_id":"0rrRihTexbwnRaxw"}
 {"created":1443982992956,"content":"^$BOTNAME$:$SP$(說|叫|快|先)?黑黑好?(.*?)","reply":"#{bindsay {target} 黑黑好！}","by":"BirkhoffLeeL","_id":"1rypXHbkE9u5BEVY"}
+{"created":1448027930405,"content":"^version$","reply":"#{version}","by":"BirkhoffLee","_id":"23zlK3IpVdegvVja"}
 {"created":1443806652000,"content":"^$BOTNAME$:$SP$(.*?)很長一串的?$SP$?XD","reply":"XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD","by":"BirkhoffLeeL","_id":"4Kk5tfsCFkMMIhtc"}
 {"created":1443982318654,"content":"^$BOTNAME$:$SP$你是?誰(啊|阿|呀|呢|那|哪)?","reply":"#{about}","by":"BirkhoffLeeL","_id":"4TSlP7q8YgPsY1Z8"}
 {"created":1443273575122,"content":"^$BOTNAME$:$SP$你?活的夠久(.*?)","reply":"不，我還不能死！","by":"BirkhoffLeeL","_id":"5r5ssL1D2wcZymJ1"}
 {"created":1443441146419,"content":"^$BOTNAME$:$SP$(.*?)trans(late|lateing)?$SP$codes?(.*?)","reply":"http://developer.baidu.com/wiki/index.php?title=%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3%E9%A6%96%E9%A1%B5/%E7%99%BE%E5%BA%A6%E7%BF%BB%E8%AF%91/%E7%BF%BB%E8%AF%91API#.E8.AF.AD.E7.A7.8D.E7.BC.96.E7.A0.81","by":"BirkhoffLeeL","_id":"6ElNkSXnRPjakk8O"}
 {"created":1443271035366,"content":"^ping$","reply":"pong","by":"BirkhoffLeeL","_id":"6U4t83tpQi8mgmGr"}
 {"created":1443440918484,"content":"^$BOTNAME$:$SP$(good|nice|great|awesome|很好|很棒|棒|贊|超棒|超讚|超好)(.*?)","reply":"My dad taught me good :)","by":"BirkhoffLeeL","_id":"6sQ6wv8uyMNZeBiR"}
+{"created":1446956556217,"content":"^$BOTNAME$:$SP$(you|u)$SP$took$SP$(so|too)$SP$long$SP$time","reply":"Sorry mate","by":"BirkhoffLee","_id":"9nFbp8qCaKPFbvmo"}
 {"created":1443194584650,"content":"^(H|h)ello$SP$(W|w)orl?d","reply":"Hello World","by":"BirkhoffLeeL","_id":"CEVv2zvu4HtxSWYR"}
 {"created":1443440949734,"content":"^$BOTNAME$:$SP$github($SP$link|$SP$url|$SP$url)?","reply":"https://github.com/BirkhoffLee/Marcas-IRC-Bot/","by":"BirkhoffLeeL","_id":"Es6sarccrHiOLimt"}
 {"created":1444059291892,"content":"^\\\\OKTW$SP$SUCKS\\!\\/$","reply":"#{nick _OKTWsucks_}#{bindsay {target} \\OKTW SUCKS!/}#{nick Marcas}","by":"BirkhoffLeeL","_id":"Gj4TlASUCgwKO26f"}
@@ -21,6 +24,6 @@
 {"created":1443449904613,"content":"gandi","reply":"no bullshit","by":"BirkhoffLeeL","_id":"irWk2dQQiQObCc9O"}
 {"created":1444355495044,"content":"^好無聊","reply":"#{explore}","by":"BirkhoffLee","_id":"l07pkxgdjSeGdT3O"}
 {"created":1445248945305,"content":"^(科科|顆顆)$","reply":"科科","by":"BirkhoffLee","_id":"mIF6m43UAs6u3Qex"}
-{"created":1444254941001,"content":"^morning_?call$","reply":"#{say {target} 大家早~~}#{say {target} 大家早~~}","by":"BirkhoffLeeL","_id":"snlO65R7k29i5KUT"}
+{"created":1447671791738,"content":"^time$","reply":"#{time}","by":"BirkhoffLee","_id":"sN01q9BWKPc4T6JG"}
 {"created":1443441958228,"content":"^$BOTNAME$:$SP$(.*?)irc($SP$chat$SP$|$SP$chatting$SP$)?log(.*?)","reply":"http://ysitd.licson.net/channel/ysitd/today","by":"BirkhoffLeeL","_id":"tiP1HtfDl7uay26q"}
 {"created":1443806686601,"content":"雞零$SP$?V","reply":"雞零V：Open Hardware 的自動雞排販賣機","by":"BirkhoffLeeL","_id":"vkznBB27U7MzpJBF"}

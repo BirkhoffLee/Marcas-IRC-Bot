@@ -11,7 +11,7 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         return;
     }
     if (commandSudo && !isAdmin) {
-        console.log("* WARNING: Unauthorized sudo request from %s".red, from);
+        util.log(("* WARNING: Unauthorized sudo request from " + from).red);
         common.botSay(target, common.mention(from) + "Access Denied!", "red");
         return;
     }
@@ -49,24 +49,16 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         uptime    = [];
         uptime[0] = "less than a minute";
     }
-
     if (uptime.length >= 2) {
-        uptime[uptime.length - 2] = "and";
+        uptime.splice(-1, 0, "and");
     }
-    uptime.forEach(function (text) {
-        if (text.startsWith("0")) {
-            return;
-        }
-
-        uptimeText += text + " ";
-    });
-
-    var uptimeText = "I've been here for " + uptimeText.trim() + ".";
+    var uptimeText = "I've been here for " + uptime.join(", ").replace(", and, ", " and ") + ".";
 
     common.botSay(target, uptimeText);
 });
 
 hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {
+    /* DO NOT TOUCH THIS */
     if (typeof commandName  == "undefined" || typeof commandSudo  == "undefined" ||
         typeof commandHelp  == "undefined" || typeof commandUsage == "undefined") {
         return;

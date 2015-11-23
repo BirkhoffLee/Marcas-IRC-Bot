@@ -36,7 +36,7 @@ hook.on('initalize/initalize', function () {
     var apiKeysArr = config.getConfig().apiKeys;
     if (typeof apiKeysArr.goo_gl == "undefined" || apiKeysArr.goo_gl == "") {
         commandDisabled = true;
-        console.log("* WARNING: goo.gl API key not given".red);
+        util.log("* WARNING: goo.gl API key not given".red);
         return;
     }
 
@@ -57,7 +57,7 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         return;
     }
     if (commandSudo && !isAdmin) {
-        console.log("* WARNING: Unauthorized sudo request from %s".red, from);
+        util.log(("* WARNING: Unauthorized sudo request from " + from).red);
         common.botSay(target, common.mention(from) + "Access Denied!", "red");
         return;
     }
@@ -69,7 +69,7 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
     randArray(feedList).forEach(function (feedURL) {
         _feed_read (feedURL, function(err, articles) {
             if (err) {
-                console.log("* WARNING: Unable to get the feed info of %s. ".red, feedURL);
+                util.log(("* WARNING: Unable to get the feed info of " + feedURL + ".").red);
                 return;
             }
             var i = articles[Math.floor(Math.random() * articles.length)];
@@ -100,6 +100,7 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
 });
 
 hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {
+    /* DO NOT TOUCH THIS */
     if (typeof commandName  == "undefined" || typeof commandSudo  == "undefined" ||
         typeof commandHelp  == "undefined" || typeof commandUsage == "undefined") {
         return;

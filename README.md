@@ -15,7 +15,7 @@ PLEASE REPLACE \node_modules\irc\lib\irc.js AS OURS!
 Before running, please make sure you have a correct configuration.
 The sample configuration file is at /config.sample.js
 Just edit the config with your favorite editor and change the filename to config.js
-Okay! Your bot is almost there! Wake him with the following command:
+Okay! Your bot is almost there! Wake him up with the following command:
 ```
 npm start
 ```

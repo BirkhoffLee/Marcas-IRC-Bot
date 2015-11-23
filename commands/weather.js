@@ -9,7 +9,7 @@ var cities = {
     "台北|臺北": "Taipei"  ,  "桃園"     : "Taoyuan" ,
     "新竹"     : "Xinzhu"  ,  "宜蘭"     : "Yilan"   ,
     "高雄"     : "Gaoxiong",  "嘉義"     : "Jiayi"   ,
-    "台南|臺南": "Tainan"  ,  "台東|臺東": "Taidong" ,
+    "台南|臺南" : "Tainan"  ,  "台東|臺東": "Taidong" ,
     "屏東"     : "Pingdong",  "台中|臺中": "Taizhong",
     "苗栗"     : "Miaoli"  ,  "彰化"     : "Zhanghua",
     "南投"     : "Nantou"  ,  "花蓮"     : "Hualian" ,  "雲林": "Yunlin"
@@ -19,7 +19,7 @@ hook.on('initalize/initalize', function () {
     var apiKeysArr = config.getConfig().apiKeys;
     if (typeof apiKeysArr.thinkpage_weather == "undefined" || apiKeysArr.thinkpage_weather == "") {
         commandDisabled = true;
-        console.log("* WARNING: Weather API key not given".red);
+        util.log("* WARNING: Weather API key not given".red);
         return;
     }
 
@@ -33,7 +33,7 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
         return;
     }
     if (commandSudo && !isAdmin) {
-        console.log("* WARNING: Unauthorized sudo request from %s".red, from);
+        util.log(("* WARNING: Unauthorized sudo request from " + from).red);
         common.botSay(target, common.mention(from) + "Access Denied!", "red");
         return;
     }
@@ -120,6 +120,7 @@ hook.on('common/runCommand', function (from, to, isAdmin, args, message) {
 });
 
 hook.on('command/help', function (target, isAdmin, args, cmdPrefix) {
+    /* DO NOT TOUCH THIS */
     if (typeof commandName  == "undefined" || typeof commandSudo  == "undefined" ||
         typeof commandHelp  == "undefined" || typeof commandUsage == "undefined") {
         return;

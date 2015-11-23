@@ -1,3 +1,13 @@
+/* global Client */
+/* global database */
+/* global botReplies */
+/* global sAdminList */
+/* global _fs */
+/* global hook */
+/* global common */
+/* global botBanList */
+/* global config */
+
 /**
  * Marcas
  *
@@ -65,10 +75,11 @@ function runCommand (from, to, message) {
     var args    =  message.split(' ');
         args[0] =  args[0].replace(cmdPre, "");
     var command =  args[0];
+    var isAdmin =  false;
 
     if (!new RegExp("^[A-Za-z0-9]").test(command)) {
         // Ignore non-alphanumeric command name
-        console.log("* COMMAND: Ignored.".magenta);
+        util.log("* COMMAND: Ignored.".magenta);
         return;
     }
 
@@ -79,33 +90,33 @@ function runCommand (from, to, message) {
         }
 
         var sudo    = true;
-        var isAdmin = common.isAdmin(from, to, sudo);
+        isAdmin = common.isAdmin(from, to, sudo);
         args.shift();       // delete "sudo"
         command = args[0];  // make the second argu to the first
-        var message = message.replace("sudo ", "");
+        message = message.replace("sudo ", "");
 
         if (!isAdmin) {
             common.botSay(target, common.mention(from) + "Access Denied!", "red");
-            console.log("* WARNING: Unauthorized sudo request from %s".red, from);
+            util.log(("* WARNING: Unauthorized sudo request from " + from).red);
             return;
         }
     } else {
         if (to.slice(0, 1) == "#") {
-            var isAdmin = common.isAdmin(from, to);
+            isAdmin = common.isAdmin(from, to);
         } else {
-            var isAdmin = common.isAdmin(from);
+            isAdmin = common.isAdmin(from);
         }
     }
 
     if (isAdmin) {
-        console.log("* COMMAND: [sudo] Command name: %s".magenta, command);
+        util.log(("* COMMAND: [sudo] Command name: " + command).magenta);
     } else {
-        console.log("* COMMAND: Command name: %s".magenta, command);
+        util.log(("* COMMAND: Command name: " + command).magenta);
     }
 
     if (!_fs.existsSync("./commands/" + command + ".js")) {
         common.botSay(target, common.mention(from) + "Command not found! Type '" + cmdPre + "help' for help.", "red");
-        console.log( "* COMMAND: Command not found.".magenta );
+        util.log( "* COMMAND: Command not found.".magenta );
         return;
     }
 
@@ -159,10 +170,9 @@ function mention (nick) {
  */
 function reloadBotReplies () {
     /* Backup */
+    var oldBotReplies = {};
     if (typeof botReplies != "undefined") {
-        var oldBotReplies = botReplies;
-    } else {
-        var oldBotReplies = {};
+        oldBotReplies = botReplies;
     }
 
     /* Delete all botReplies in memory */
@@ -171,7 +181,7 @@ function reloadBotReplies () {
     /* Reload */
     database.botReplies.find({}, function (err, documents) {
         if (err != null) {
-            console.log("* WARNING: Failed loading botReplies!".red);
+            util.log("* WARNING: Failed loading botReplies!".red);
             return;
         }
 
@@ -200,10 +210,9 @@ function reloadBotReplies () {
  */
 function reloadBotBanList () {
     /* Backup */
+    var oldBotBanList = [];
     if (typeof botBanList != "undefined") {
-        var oldBotBanList = botBanList;
-    } else {
-        var oldBotBanList = [];
+        oldBotBanList = botBanList;
     }
 
     /* Delete all botBanList in memory */
@@ -212,7 +221,7 @@ function reloadBotBanList () {
     /* Reload */
     database.botBanList.find({}, function (err, documents) {
         if (err !== null) {
-            console.log("* WARNING: Failed loading botBanList!".red);
+            util.log("* WARNING: Failed loading botBanList!".red);
         } else if (typeof documents !== 'undefined' && documents != []) {
             for (var doc in documents) {
                 if (typeof documents[doc].banNick != "undefined") {
@@ -249,7 +258,7 @@ function botSay (target, content, color, singleLine) {
 
         return Client.say(target, say);
     } catch(e) {
-        console.log("* WARNING: ERROR SENDING MESSAGE".red);
+        util.log("* WARNING: ERROR SENDING MESSAGE".red);
     }
 }
 
